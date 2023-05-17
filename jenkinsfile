@@ -2,41 +2,56 @@ pipeline {
     agent any
 
     stages {
-        stage ('check env'){
+        stage ('Compile Test'){
             steps {
-                sh "mvn -v"
-                sh "java -version"
+                sh "mvn compile test"
+                script {
+                    if (currentBuild.result == 'SUCCESS') {
+                        env.BUILD_STAGE1_STATUS = 'SUCCESS'
+                    } else {
+                        env.BUILD_STAGE1_STATUS = 'FAILURE'
+                    }     
+                }           
             }
         }
         
-        stage ('test') {
-            steps {
-                sh "mvn test"
-            }
-        }
-        
-        stage ('package') {
+        stage ('Package Sonar') {
             steps {
                 sh "mvn clean package"
+                script {
+                    if (currentBuild.result == 'SUCCESS') {
+                        env.BUILD_STAGE3_STATUS = 'SUCCESS'
+                    } else {
+                        env.BUILD_STAGE3_STATUS = 'FAILURE'
+                    }     
+                }  
             }
         }
         
-        stage ('report') {
+        stage ('Report Junit') {
             steps {
                 step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+                script {
+                    if (currentBuild.result == 'SUCCESS') {
+                        env.BUILD_STAGE4_STATUS = 'SUCCESS'
+                    } else {
+                        env.BUILD_STAGE4_STATUS = 'FAILURE'
+                    }     
+                }  
             }
         }
-        
-        stage ('Artifact') {
-            steps {
-                step([$class: 'ArtifactArchiver', artifacts: '**/target/*.jar', fingerprint: true])
+    }
+
+    post {
+        always {
+            script {
+                def summary = "Pipeline summary:\n"
+                summary += "Compile Test stage: ${env.BUILD_STAGE1_STATUS}\n"
+                summary += "Package Sonar stage: ${env.BUILD_STAGE2_STATUS}\n"
+                summary += "Report JUnit stage: ${env.BUILD_STAGE3_STATUS}\n"
+                sumary += "${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)\n"
+                slackSend message: summary
             }
-        }
-        
-        stage('SonarQube analysis') {
-              steps {
-                 sh 'mvn clean package sonar:sonar'
-              }
         }
     }
 }
