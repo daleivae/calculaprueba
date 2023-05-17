@@ -8,12 +8,18 @@
     <name>calculaPrueba</name>
     <dependencies>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.7.1</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.7</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <properties>
+        <!-- A common location in which a surefire report from 'test' and failsafe report from
+        'integration-test' phase will be stored. See also the clover-report.xml file which refers
+        to this location -->
+        <surefire.and.failsafe.report.dir>target/test-report</surefire.and.failsafe.report.dir>
+    </properties>    
     <build>
         <plugins>
             <plugin>
@@ -28,31 +34,24 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
-                        <execution>
-                            <goals>
-                                <goal>integration-test</goal>
-                                <goal>verify</goal>
-                            </goals>
-                        </execution>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
                 </executions>
+                <configuration>
+                    <reportsDirectory>${surefire.and.failsafe.report.dir}</reportsDirectory>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <!-- Disable unit tests -->
-                    <skip>false</skip>
+                    <reportsDirectory>${surefire.and.failsafe.report.dir}</reportsDirectory>
                 </configuration>
             </plugin>
         </plugins>
-    </build>    
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.5</version>
-            </plugin>
-        </plugins>
-    </reporting>    
+    </build>
 </project>

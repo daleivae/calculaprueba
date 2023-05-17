@@ -5,13 +5,6 @@ pipeline {
         stage ('Compile Test'){
             steps {
                 sh "mvn compile test"
-                script {
-                    if (currentBuild.result == 'SUCCESS') {
-                        env.BUILD_STAGE1_STATUS = 'SUCCESS'
-                    } else {
-                        env.BUILD_STAGE1_STATUS = 'FAILURE'
-                    }     
-                }           
             }
         }
         
@@ -20,66 +13,19 @@ pipeline {
                 sh "mvn clean package -DskipTests=true sonar:sonar -Dsonar.projectKey=ScannerMavenJenkins \
                                                   -Dsonar.host.url=http://172.28.224.1:8082 \
                                                   -Dsonar.login=sqp_98788e87facf9eeb7295ce9a2ebc2c54bf292101"
-                script {
-                    if (currentBuild.result == 'SUCCESS') {
-                        env.BUILD_STAGE2_STATUS = 'SUCCESS'
-                    } else {
-                        env.BUILD_STAGE2_STATUS = 'FAILURE'
-                    }     
-                }  
             }
         }
         
-        stage('Unit Tests') {
+        stage ('Reporting') {
             steps {
-                sh 'mvn surefire:test'
-                script {
-                    if (currentBuild.result == 'SUCCESS') {
-                        env.BUILD_STAGE3_STATUS = 'SUCCESS'
-                    } else {
-                        env.BUILD_STAGE3_STATUS = 'FAILURE'
-                    }     
-                }  
+                sh "mvn clean clover:setup verify clover:aggregate clover:clover"
             }
         }
-        
-        stage('Integration Tests') {
-            steps {
-                sh 'mvn failsafe:integration-test'
-                sh "mvn surefire-report:report"
-                script {
-                    if (currentBuild.result == 'SUCCESS') {
-                        env.BUILD_STAGE4_STATUS = 'SUCCESS'
-                    } else {
-                        env.BUILD_STAGE4_STATUS = 'FAILURE'
-                    }     
-                }                  
-            }
-        }
-
-        stage ('Publish test results') {
-            steps {
-                step([$class: 'JUnitResultArchiver', testResults: '**/reports/junit/*.xml'])
-                script {
-                    if (currentBuild.result == 'SUCCESS') {
-                        env.BUILD_STAGE5_STATUS = 'SUCCESS'
-                    } else {
-                        env.BUILD_STAGE5_STATUS = 'FAILURE'
-                    }     
-                }  
-            }
-        }
-    }
+     }
 
     post {
         failure {
                 slackSend message:  "FAILED ${env.JOB_NAME} ${env.BUILD_NUMBER}" 
         }
-        always {
-            junit(
-                allowEmptyResults: true,
-                testResults: '**/test-reports/*.xml'
-            )
-        }    
     }
 }
