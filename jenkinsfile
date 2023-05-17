@@ -57,9 +57,9 @@ pipeline {
             }
         }
 
-        stage ('Junit') {
+        stage ('Publish test results') {
             steps {
-                step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/*.xml'])
+                step([$class: 'JUnitResultArchiver', testResults: '**/reports/junit/*.xml'])
                 script {
                     if (currentBuild.result == 'SUCCESS') {
                         env.BUILD_STAGE5_STATUS = 'SUCCESS'
@@ -75,9 +75,11 @@ pipeline {
         failure {
                 slackSend message:  "FAILED ${env.JOB_NAME} ${env.BUILD_NUMBER}" 
         }
-        
-        always{
-            junit 'target/surefire-reports/*.xml'
-        }        
+        always {
+            junit(
+                allowEmptyResults: true,
+                testResults: '**/test-reports/*.xml'
+            )
+        }    
     }
 }
