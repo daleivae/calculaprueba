@@ -17,7 +17,9 @@ pipeline {
         
         stage ('Package Sonar') {
             steps {
-                sh "mvn clean package"
+                sh "mvn clean package sonar:sonar -Dsonar.projectKey=ScannerMavenJenkins \
+                                                  -Dsonar.host.url=http://172.28.224.1:8082 \
+                                                  -Dsonar.login=sqp_98788e87facf9eeb7295ce9a2ebc2c54bf292101"
                 script {
                     if (currentBuild.result == 'SUCCESS') {
                         env.BUILD_STAGE3_STATUS = 'SUCCESS'
@@ -44,14 +46,12 @@ pipeline {
 
     post {
         always {
-            script {
                 def summary = "Pipeline summary:\n"
                 summary += "Compile Test stage: ${env.BUILD_STAGE1_STATUS}\n"
                 summary += "Package Sonar stage: ${env.BUILD_STAGE2_STATUS}\n"
                 summary += "Report JUnit stage: ${env.BUILD_STAGE3_STATUS}\n"
                 sumary += "${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)\n"
                 slackSend message: summary
-            }
         }
     }
 }
