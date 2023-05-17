@@ -59,7 +59,7 @@ pipeline {
 
         stage ('Junit') {
             steps {
-                junit 'tests/results/*.xml'
+                step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/*.xml'])
                 script {
                     if (currentBuild.result == 'SUCCESS') {
                         env.BUILD_STAGE5_STATUS = 'SUCCESS'
