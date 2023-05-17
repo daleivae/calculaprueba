@@ -47,12 +47,16 @@ pipeline {
 
     post {
         always {
-                def summary = "Pipeline summary:\n"
-                summary += "Compile Test stage: ${env.BUILD_STAGE1_STATUS}\n"
-                summary += "Package Sonar stage: ${env.BUILD_STAGE2_STATUS}\n"
-                summary += "Report JUnit stage: ${env.BUILD_STAGE3_STATUS}\n"
-                sumary += "${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)\n"
-                slackSend message: summary
+                slackSend(message: "${custom_msg()}")
         }
     }
+}
+def custom_msg()
+{
+    def summary = "Pipeline summary ${env.JOB_NAME} ${env.BUILD_NUMBER}:\n"
+    summary += "Compile Test stage: ${env.BUILD_STAGE1_STATUS}\n"
+    summary += "Package Sonar stage: ${env.BUILD_STAGE2_STATUS}\n"
+    summary += "Report JUnit stage: ${env.BUILD_STAGE3_STATUS}\n"
+    sumary += "(<${env.BUILD_URL}|Open>)\n"
+    return sumary
 }
