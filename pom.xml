@@ -6,6 +6,12 @@
     <packaging>jar</packaging>
     <version>1.0</version>
     <name>calculaPrueba</name>
+    <properties>
+        <!-- A common location in which a surefire report from 'test' and failsafe report from
+        'integration-test' phase will be stored. See also the clover-report.xml file which refers
+        to this location -->
+        <surefire.and.failsafe.report.dir>target/test-report</surefire.and.failsafe.report.dir>
+    </properties>        
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -13,18 +19,19 @@
             <version>4.7</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>3.1.0</version>
+            <type>maven-plugin</type>
+        </dependency>
     </dependencies>
-    <properties>
-        <!-- A common location in which a surefire report from 'test' and failsafe report from
-        'integration-test' phase will be stored. See also the clover-report.xml file which refers
-        to this location -->
-        <surefire.and.failsafe.report.dir>target/test-report</surefire.and.failsafe.report.dir>
-    </properties>    
     <build>
         <plugins>
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>4.2.0</version>
                 <configuration>
                     <!-- Use custom report descriptor -->
                     <reportDescriptor>clover-report.xml</reportDescriptor>
@@ -33,6 +40,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -48,6 +56,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
                     <reportsDirectory>${surefire.and.failsafe.report.dir}</reportsDirectory>
                 </configuration>
