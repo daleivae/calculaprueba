@@ -16,7 +16,7 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>`
+            <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
@@ -41,7 +41,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <!-- Disable unit tests -->
-                    <skip>true</skip>
+                    <skip>false</skip>
                 </configuration>
             </plugin>
         </plugins>
