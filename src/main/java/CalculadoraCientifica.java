@@ -1,4 +1,4 @@
-package calculaprueba;
+package main.java;
 
 public class CalculadoraCientifica {
     public double elevado(double a, double b) {

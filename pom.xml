@@ -13,6 +13,13 @@
         <surefire.and.failsafe.report.dir>**/target/surefire-reports/*.xml</surefire.and.failsafe.report.dir>
     </properties>        
     <dependencies>
+    		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<scope>test</scope>
+		</dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
