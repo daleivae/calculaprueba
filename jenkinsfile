@@ -2,23 +2,11 @@ pipeline {
     agent any
 
     stages {
-        stage ('Compile Test'){
-            steps {
-                sh "mvn compile test"
-            }
-        }
-        
-        stage ('Package Sonar') {
+        stage ('Build') {
             steps {
                 sh "mvn clean package sonar:sonar -Dsonar.projectKey=ScannerMavenJenkins \
                                                   -Dsonar.host.url=http://172.28.224.1:8082 \
                                                   -Dsonar.login=sqp_98788e87facf9eeb7295ce9a2ebc2c54bf292101"
-            }
-        }
-        
-        stage ('Reporting') {
-            steps {
-                sh "mvn clean clover:setup verify clover:aggregate clover:clover"
             }
         }
      }
