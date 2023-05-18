@@ -1,8 +1,10 @@
+package test.java;
+
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import main.java.CalculadoraCientifica;
-
-import static org.junit.Assert.assertEquals;
     
 public class CalculadoraCientificaTest {
 
