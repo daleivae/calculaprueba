@@ -10,7 +10,7 @@
         <!-- A common location in which a surefire report from 'test' and failsafe report from
         'integration-test' phase will be stored. See also the clover-report.xml file which refers
         to this location -->
-        <surefire.and.failsafe.report.dir>**/target/surefire-reports/*.xml</surefire.and.failsafe.report.dir>
+        <surefire.and.failsafe.report.dir>**/target/failsafe-reports/*.xml</surefire.and.failsafe.report.dir>
     </properties>        
     <dependencies>
     		<!-- Test -->
