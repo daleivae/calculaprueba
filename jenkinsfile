@@ -19,7 +19,7 @@ pipeline {
                 slackSend message:  "SUCCESS ${env.JOB_NAME} ${env.BUILD_NUMBER}" 
         }        
         always {
-            junit '**/target/surefire-reports/TEST-*.xml'
+            junit '**/target/test-report/*.xml'
             archiveArtifacts 'target/*.jar'
         }        
     }

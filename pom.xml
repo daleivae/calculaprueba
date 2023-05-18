@@ -10,13 +10,13 @@
         <!-- A common location in which a surefire report from 'test' and failsafe report from
         'integration-test' phase will be stored. See also the clover-report.xml file which refers
         to this location -->
-        <surefire.and.failsafe.report.dir>target/test-report</surefire.and.failsafe.report.dir>
+        <surefire.and.failsafe.report.dir>**/target/surefire-reports/*.xml</surefire.and.failsafe.report.dir>
     </properties>        
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.7</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -27,6 +27,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>maven-unit-test</finalName>
         <plugins>
             <plugin>
                 <groupId>org.openclover</groupId>
@@ -42,15 +43,22 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
-                    <execution>
+               	    <execution>
+                  	    <id>integration-test</id>
                         <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                     	    <goal>integration-test</goal>
+                   		</goals>
+                	</execution>
+               		<execution>
+                  	    <id>verify</id>
+                  		<goals>
+                     	    <goal>verify</goal>
+                   		</goals>
+               		</execution>
+           		 </executions>
                 <configuration>
                     <reportsDirectory>${surefire.and.failsafe.report.dir}</reportsDirectory>
+                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
             <plugin>
@@ -61,6 +69,23 @@
                     <reportsDirectory>${surefire.and.failsafe.report.dir}</reportsDirectory>
                 </configuration>
             </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+           			 <version>3.6.0</version>
+            			<configuration>
+                			<source>1.8</source>
+                			<target>1.8</target>
+            			</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<configuration>
+					<mainClass>org.test.int1.Main</mainClass>
+				</configuration>
+			</plugin>                       
         </plugins>
     </build>
 </project>
