@@ -10,7 +10,7 @@ pipeline {
         
         stage ('Package Sonar') {
             steps {
-                sh "mvn clean package -DskipTests=true sonar:sonar -Dsonar.projectKey=ScannerMavenJenkins \
+                sh "mvn clean package sonar:sonar -Dsonar.projectKey=ScannerMavenJenkins \
                                                   -Dsonar.host.url=http://172.28.224.1:8082 \
                                                   -Dsonar.login=sqp_98788e87facf9eeb7295ce9a2ebc2c54bf292101"
             }
