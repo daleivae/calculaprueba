@@ -27,5 +27,8 @@ pipeline {
         failure {
                 slackSend message:  "FAILED ${env.JOB_NAME} ${env.BUILD_NUMBER}" 
         }
+        success {
+                slackSend message:  "SUCCESS ${env.JOB_NAME} ${env.BUILD_NUMBER}" 
+        }        
     }
 }
