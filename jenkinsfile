@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage ('Build') {
             steps {
-                sh "mvn clean package sonar:sonar -Dsonar.projectKey=ScannerMavenJenkins \
+                sh "mvn clean install sonar:sonar -Dsonar.projectKey=ScannerMavenJenkins \
                                                   -Dsonar.host.url=http://172.28.224.1:8082 \
                                                   -Dsonar.login=sqp_98788e87facf9eeb7295ce9a2ebc2c54bf292101"
             }
@@ -19,7 +19,7 @@ pipeline {
                 slackSend message:  "SUCCESS ${env.JOB_NAME} ${env.BUILD_NUMBER}" 
         }        
         always {
-            junit '**/target/failsafe-reports/*.xml'
+            junit '**/target/surefire-reports/*.xml'
             archiveArtifacts 'target/*.jar'
         }        
     }
